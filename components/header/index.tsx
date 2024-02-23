@@ -17,13 +17,13 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         paddingBottom: 10,
-        backgroundColor: Colors.primaryblue,
+        backgroundColor: Colors.primaryblue, // Replace with your primary color
         borderBottomLeftRadius: 25,
         borderBottomRightRadius: 25,
     },
     headerTitleStyle: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: Colors.white,
+        color: Colors.white, // Replace with your text color
     },
 });
