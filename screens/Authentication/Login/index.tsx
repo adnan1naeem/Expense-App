@@ -23,43 +23,42 @@ const LoginScreen = ({ navigation }) => {
     const passwordInputRef = createRef<any>();
     const dispatch = useDispatch();
 
+    // Function to handle login form submission
     const handleSubmitPress = () => {
         setErrortext('');
         if (!isEmailValid(userEmail)) {
-            alert('Please enter valid Email');
+            alert('Please enter a valid Email');
             return;
         }
         if (!userPassword) {
-            alert('Please fill Password');
+            alert('Please fill in the Password');
             return;
         }
         setLoading(true);
         let data = {
             email: userEmail,
-            password: userPassword
-        }
+            password: userPassword,
+        };
         signIn(data);
     };
 
-    const signIn = async ({ email, password }: {
-        email: string;
-        password: string;
-    }) => {
+    // Function to authenticate user using AWS Cognito
+    const signIn = async ({ email, password }: { email: string; password: string }) => {
         try {
             const signedInUser = await Auth.signIn(email, password);
             await AsyncStorage.setItem('TOKEN', signedInUser?.signInUserSession?.idToken?.jwtToken);
-            // console.log(JSON.stringify(signedInUser, null,2))
             dispatch(actions.loginSuccess(signedInUser));
             setLoading(false);
-            navigation.navigate("home");
+            navigation.navigate('home');
             return signedInUser;
         } catch (err) {
-            console.log(JSON.stringify(err, null, 2), "errerr\n\n")
+            console.log(JSON.stringify(err, null, 2), 'Error during login');
             setLoading(false);
             return null;
         }
     };
 
+    // Function to check if email is valid
     const isEmailValid = (email: string) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
@@ -77,14 +76,13 @@ const LoginScreen = ({ navigation }) => {
                         />
                     </View>
                     <Text style={styles.welcomeText}>Welcome to Expense Tracker!</Text>
+                    {/* Email Input */}
                     <View style={styles.SectionStyle}>
                         <TextInput
                             style={styles.inputStyle}
-                            onChangeText={(UserEmail) =>
-                                setUserEmail(UserEmail)
-                            }
+                            onChangeText={(UserEmail) => setUserEmail(UserEmail)}
                             value={userEmail}
-                            placeholder="Enter Email" //dummy@abc.com
+                            placeholder="Enter Email"
                             placeholderTextColor="#8b9cb5"
                             autoCapitalize="none"
                             keyboardType="email-address"
@@ -98,12 +96,11 @@ const LoginScreen = ({ navigation }) => {
                             blurOnSubmit={false}
                         />
                     </View>
+                    {/* Password Input */}
                     <View style={styles.SectionStyle}>
                         <TextInput
                             style={styles.inputStyle}
-                            onChangeText={(UserPassword) =>
-                                setUserPassword(UserPassword)
-                            }
+                            onChangeText={(UserPassword) => setUserPassword(UserPassword)}
                             value={userPassword}
                             placeholder="Enter Password"
                             placeholderTextColor="#8b9cb5"
@@ -116,11 +113,11 @@ const LoginScreen = ({ navigation }) => {
                             returnKeyType="next"
                         />
                     </View>
+                    {/* Display error text if there's an error */}
                     {errortext != '' ? (
-                        <Text style={styles.errorTextStyle}>
-                            {errortext}
-                        </Text>
+                        <Text style={styles.errorTextStyle}>{errortext}</Text>
                     ) : null}
+                    {/* Login Button */}
                     <TouchableOpacity
                         style={styles.buttonStyle}
                         activeOpacity={0.5}
@@ -132,4 +129,5 @@ const LoginScreen = ({ navigation }) => {
         </View>
     );
 };
+
 export default LoginScreen;
