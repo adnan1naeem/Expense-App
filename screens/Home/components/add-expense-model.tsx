@@ -6,18 +6,22 @@ import { createExpense, editExpenseItem } from '../../../redux/app/operations';
 import moment from 'moment';
 
 const AppExpenseModal = ({ modalVisible, setModalVisible, editExpense }) => {
+    // State variables for the modal
     const [expenseTitle, setExpenseTitle] = useState('');
     const [expenseDate, setExpenseDate] = useState('');
     const [expenseAmount, setExpenseAmount] = useState('');
-    const dispatch = useDispatch<any>();
+    const dispatch = useDispatch<any>(); // Create a dispatch function
 
+    // useEffect to update state when editExpense changes
     useEffect(() => {
         setExpenseTitle(editExpense?.message);
         setExpenseDate(editExpense?.message ? moment(editExpense?.message).format("YYYY-MM-DD") : "");
         setExpenseAmount(editExpense?.expense);
-    }, [modalVisible])
+    }, [modalVisible]);
 
+    // Function to handle form submission
     const handleModalSubmit = () => {
+        // Validate input fields
         if (!expenseTitle.trim()) {
             alert('Please enter a valid Expense Title');
             return;
@@ -33,31 +37,42 @@ const AppExpenseModal = ({ modalVisible, setModalVisible, editExpense }) => {
             alert('Please enter a valid positive Expense Amount');
             return;
         }
+
+        // Create data object
         let data = {
             message: expenseTitle,
             expense: expenseAmount,
             date: expenseDate
-        }
+        };
+
+        // Dispatch the appropriate action based on whether it's an edit or a new expense
         if (editExpense) {
             let combineData = {
                 id: editExpense?.id,
                 ...data,
-            }
-            dispatch(editExpenseItem(combineData)).then((item: any) => {
-                console.log(JSON.stringify(item), "edit success");
-            }).catch((error: any) => {
-                console.log(JSON.stringify(error), "edit error");
-            });
+            };
+            dispatch(editExpenseItem(combineData))
+                .then((item: any) => {
+                    console.log(JSON.stringify(item), "edit success");
+                })
+                .catch((error: any) => {
+                    console.log(JSON.stringify(error), "edit error");
+                });
         } else {
-            dispatch(createExpense(data)).then((item: any) => {
-                console.log(JSON.stringify(item), "created");
-            }).catch((error: any) => {
-                console.log(JSON.stringify(error), "created error");
-            });
+            dispatch(createExpense(data))
+                .then((item: any) => {
+                    console.log(JSON.stringify(item), "created");
+                })
+                .catch((error: any) => {
+                    console.log(JSON.stringify(error), "created error");
+                });
         }
+
+        // Close the modal
         setModalVisible(false);
     };
 
+    // Return JSX for the component
     return (
         <Modal
             visible={modalVisible}
@@ -98,6 +113,7 @@ const AppExpenseModal = ({ modalVisible, setModalVisible, editExpense }) => {
                     <TouchableOpacity style={styles.button} onPress={handleModalSubmit}>
                         <Text style={styles.buttonText}>Submit</Text>
                     </TouchableOpacity>
+
                     {/* Close Modal Button */}
                     <Button title="Close" onPress={() => setModalVisible(false)} />
                 </View>
