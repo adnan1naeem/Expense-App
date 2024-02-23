@@ -1,8 +1,5 @@
 import * as types from './types';
 
-/**
- * initial app
- */
 export const loginSuccess = (data: object) => ({
   type: types.LOGIN_SUCCESS,
   payload: {
