@@ -53,6 +53,7 @@ const LoginScreen = ({ navigation }) => {
             return signedInUser;
         } catch (err) {
             console.log(JSON.stringify(err, null, 2), 'Error during login');
+            alert("Invalid Credentials")
             setLoading(false);
             return null;
         }
