@@ -12,7 +12,9 @@ const TransectionList = ({ expenseListData, setModalVisible, setEditExpense }) =
     let row = [];
     let prevOpenedRow;
 
+    // Function to render each item in the FlatList
     const renderItem = ({ item, index }) => {
+        // Function to render swipeable right actions
         const renderRightActions = () => {
             return (
                 <View style={styles.rightActions}>
@@ -33,19 +35,23 @@ const TransectionList = ({ expenseListData, setModalVisible, setEditExpense }) =
             );
         };
 
+        // Function to handle edit action
         const handleEdit = (item: any) => {
             closeRow();
             setEditExpense(item);
             setModalVisible(true);
-        }
+        };
+
+        // Function to handle delete action
         const handleDelete = (item: any) => {
             closeRow();
             let data = {
                 id: item?.id
-            }
+            };
             dispatch(deleteExpense(data));
-        }
+        };
 
+        // Function to close the currently opened row
         const closeRow = () => {
             if (prevOpenedRow && prevOpenedRow !== row[index]) {
                 prevOpenedRow.close();
@@ -53,39 +59,47 @@ const TransectionList = ({ expenseListData, setModalVisible, setEditExpense }) =
             prevOpenedRow = row[index];
         };
 
+        // Function to format date using Moment.js
         const getDate = (date) => {
-            return moment(date).format("YYYY-MM-DD")
-        }
+            return moment(date).format("YYYY-MM-DD");
+        };
 
-        return <Swipeable
-            renderRightActions={renderRightActions}
-            onSwipeableOpen={closeRow}
-            ref={(ref) => (row[index] = ref)}>
-            <View style={styles.listContainer}>
-                <View style={styles.listImageContainer}>
-                    <Image
-                        source={require('../../../assets/logo.png')}
-                        style={styles.listImage} />
+        // Return a Swipeable-wrapped view for each item
+        return (
+            <Swipeable
+                renderRightActions={renderRightActions}
+                onSwipeableOpen={closeRow}
+                ref={(ref) => (row[index] = ref)}>
+                <View style={styles.listContainer}>
+                    {/* Image Container */}
+                    <View style={styles.listImageContainer}>
+                        <Image
+                            source={require('../../../assets/logo.png')}
+                            style={styles.listImage}
+                        />
+                    </View>
+                    {/* Text Container */}
+                    <View style={styles.listTextContainer}>
+                        <Text style={styles.listHeadingText}>{item?.message}</Text>
+                        <Text style={styles.listDate}>{getDate(item?.date)}</Text>
+                    </View>
+                    {/* Amount Text */}
+                    <Text style={styles.listAmount}>- {item?.expense} $</Text>
                 </View>
-                <View style={styles.listTextContainer}>
-                    <Text style={styles.listHeadingText}>{item?.message}</Text>
-                    <Text style={styles.listDate}>{getDate(item?.date)}</Text>
-                </View>
-                <Text style={styles.listAmount}>- {item?.expense} $</Text>
-            </View>
-        </Swipeable>
+            </Swipeable>
+        );
     };
 
+    // Return the main component JSX
     return (
         <View>
-            <Text style={styles.transectionText}>All Transection</Text>
+            <Text style={styles.transectionText}>All Transaction</Text>
             <FlatList
                 data={expenseListData}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.value}
             />
         </View>
-
     );
 };
 export default TransectionList;
