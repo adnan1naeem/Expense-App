@@ -9,21 +9,22 @@ import { useEffect } from "react";
 import config from "./config";
 
 export default function App() {
-  //Amplify configuration
+  // Amplify configuration
   Amplify.configure({
     Auth: {
       identityPoolId: config.s3.identityPoolId,
       region: config.aws.region,
       userPoolId: config.auth.userPoolId,
-      userPoolWebClientId: config.auth.userPoolWebClientId
+      userPoolWebClientId: config.auth.userPoolWebClientId,
     },
     oauth: {
       domain: config.auth.domain,
-      scope: ["email"],
-      responseType: "code",
+      scope: ['email'],
+      responseType: 'code',
     },
   });
-  
+
+  // Ignore all logs during development
   useEffect(() => {
     LogBox.ignoreAllLogs();
   }, []);
@@ -32,6 +33,7 @@ export default function App() {
     <Provider store={store}>
       <PersistGate persistor={persistor}>
         <SafeAreaProvider>
+          {/* Navigation component */}
           <Navigation />
         </SafeAreaProvider>
       </PersistGate>

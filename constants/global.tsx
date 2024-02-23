@@ -1,2 +1,5 @@
+// Configuration file or module for API URL
 const url: string = 'https://lzou3h8ouf.execute-api.us-east-1.amazonaws.com/dev/';
-exports.URL = url;
+
+// Exporting the URL for use in other parts of the application
+export const URL = url;
