@@ -48,6 +48,7 @@ const LoginScreen = ({ navigation }) => {
         try {
             const signedInUser = await Auth.signIn(email, password);
             await AsyncStorage.setItem('TOKEN', signedInUser?.signInUserSession?.idToken?.jwtToken);
+            // console.log(JSON.stringify(signedInUser, null,2))
             dispatch(actions.loginSuccess(signedInUser));
             setLoading(false);
             navigation.navigate("home");

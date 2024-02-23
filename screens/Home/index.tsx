@@ -22,23 +22,27 @@ const Index = () => {
     const dispatch = useDispatch<any>();
 
     useEffect(() => {
+        // Initial API call when the component mounts
         callExpenseApi();
     }, []);
 
     useEffect(() => {
+        // Update totalExpense and totalRemaining when expenseListData changes
         if (expenseListData) {
             const totalExpense = expenseListData?.reduce((sum: string, item: any) => sum + parseInt(item?.expense), 0);
             setTotalExpense(totalExpense);
             setTotalRemaining(totalIncome - totalExpense);
         }
-    }, [expenseListData])
+    }, [expenseListData]);
 
     const callExpenseApi = async () => {
+        // Dispatch the expenseList action and update loading state
         await dispatch(expenseList()).then(() => setLoading(false));
         setLoading(false);
     }
 
     const handleFloatingClick = () => {
+        // Open the modal for adding a new expense or editing an existing one
         setEditExpense(null);
         setModalVisible(true);
     };
@@ -46,6 +50,7 @@ const Index = () => {
     return (
         <View style={styles.mainConatainer}>
             <ScrollView style={styles.mainBody}>
+
                 {/* Header Component */}
                 <Header title={"Home"} />
 
@@ -53,17 +58,20 @@ const Index = () => {
                 <Loader loading={loading} />
 
                 <View style={styles.childContainer}>
-                    
+
                     {/* Welcome Module */}
                     <View style={styles.container}>
                         <View style={styles.imageContainer}>
+                            {/* Logo Image */}
                             <Image
                                 source={require('../../assets/logo.png')}
                                 style={styles.image}
                             />
                         </View>
                         <View style={styles.textContainer}>
+                            {/* Welcome Text */}
                             <Text style={styles.welcomeText}>Welcome!</Text>
+                            {/* User's Name */}
                             <Text style={styles.nameText}>Usama Laeeq</Text>
                         </View>
                     </View>
@@ -72,7 +80,8 @@ const Index = () => {
                     <TotalIncome
                         totalRemaining={totalRemaining}
                         totalIncome={totalIncome}
-                        totalExpense={totalExpense} />
+                        totalExpense={totalExpense}
+                    />
 
                     {/* List of income */}
                     <TransectionList
@@ -88,10 +97,11 @@ const Index = () => {
                 style={styles.floatingButton}
                 onPress={handleFloatingClick}
             >
+                {/* Plus Icon */}
                 <FontAwesome name="plus" size={24} color={Colors.white} />
             </TouchableOpacity>
 
-            {/*Modal View  */}
+            {/* Modal View */}
             <AppExpenseModal
                 setModalVisible={setModalVisible}
                 modalVisible={modalVisible}
@@ -99,5 +109,6 @@ const Index = () => {
             />
         </View>
     );
+
 };
 export default Index;
